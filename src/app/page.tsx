@@ -16,6 +16,10 @@ export default async function Home() {
       ) : (
         <>No messages</>
       )}
+      <form action="">
+        <input type="text" placeholder="Message" />
+        <button type="submit">Send</button>
+      </form>
     </main>
   );
 }
