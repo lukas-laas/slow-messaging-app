@@ -7,7 +7,12 @@ export default async function Home() {
     <main>
       <h1>Slow-messaging</h1>
       {messages.length ? (
-        messages.map((message) => <p key={message.id}>{message.message}</p>)
+        messages.map((message) => (
+          <p key={message.id}>
+            <strong>{message.username}: </strong> {message.message} -{" "}
+            {message.time.toLocaleTimeString()}
+          </p>
+        ))
       ) : (
         <>No messages</>
       )}
