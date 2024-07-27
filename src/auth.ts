@@ -22,7 +22,6 @@ export const authenticate = async (formData: FormData) => {
       throw new Error("Access denied");
     const expires = new Date(Date.now() + 10 * 1000).valueOf();
 
-    //Not encrypting for this assignment for the sake of simplicity.
     cookies().set(
       "session",
       JSON.stringify({ user: username, expires: expires }),
@@ -35,7 +34,6 @@ export const authenticate = async (formData: FormData) => {
   } catch (error) {
     console.log(error.message);
   }
-  //Redirects should be placed outside try catch according to Next documentation.
   if (access) redirect("/");
 };
 
