@@ -2,12 +2,22 @@
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import z from "zod";
+
+const LoginSchema = z.object({
+  password: z.string().min(1),
+  username: z.string().min(1).max(255),
+});
 
 export const authenticate = async (formData: FormData) => {
   let access = false;
+
   try {
     const password = formData.get("password");
     const username = formData.get("username");
+
+    LoginSchema.safeParse({ username: username, password: password });
+
     if (password !== process.env.LOGIN_PASSWORD)
       throw new Error("Access denied");
     const expires = new Date(Date.now() + 10 * 1000).valueOf();

@@ -5,6 +5,9 @@ import postgres from "postgres";
 import * as schema from "./schema";
 import { revalidatePath } from "next/cache";
 import { getSession } from "./auth";
+import z from "zod";
+
+const Message = z.string().max(255).min(1);
 
 const dbUrl = process.env.DB_URL!;
 const client = postgres(dbUrl);
@@ -27,6 +30,8 @@ export const postMessage = async (formData: FormData) => {
   const session = await getSession();
 
   const message = formData.get("message")!.toString();
+  Message.safeParse(message);
+
   const data = {
     id: mockdb.length.toString(),
     message: message,
