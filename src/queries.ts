@@ -6,6 +6,7 @@ import * as schema from "./schema";
 import { revalidatePath } from "next/cache";
 import { getSession } from "./auth";
 import z from "zod";
+import { filterMessages } from "./utils";
 
 const Message = z.string().max(255).min(1);
 
@@ -22,8 +23,12 @@ const mockdb = [
 
 export const getAllMessages = async () => {
   //const messages = await db.query.messages.findMany();
+  const timeNow = new Date();
+  const session = await getSession();
+
   const messages = await mockdb;
-  return messages;
+  const filteredMessages = filterMessages(messages, session, timeNow);
+  return filteredMessages;
 };
 
 export const postMessage = async (formData: FormData) => {

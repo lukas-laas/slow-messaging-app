@@ -48,7 +48,6 @@ export const getSession = async () => {
     return null;
   }
   const session = await JSON.parse(sessionCookie);
-  console.log(session);
-  console.log(sessionCookie);
+
   return session;
 };

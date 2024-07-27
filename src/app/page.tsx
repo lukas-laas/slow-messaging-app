@@ -12,8 +12,11 @@ export default async function Home() {
       {messages.length ? (
         messages.map((message) => (
           <p key={message.id}>
-            <strong>{message.username}: </strong> {message.message} -{" "}
-            {message.time.toLocaleTimeString()}
+            <strong>{message.username}: </strong>{" "}
+            {message.message
+              ? message.message
+              : `Message available at ${new Date(message.time + 3600000)}`}{" "}
+            - {message.time.toLocaleTimeString()}
           </p>
         ))
       ) : (
