@@ -16,7 +16,7 @@ export default async function Home() {
             {message.message
               ? message.message
               : `Message available at ${new Date(
-                  message.time + 3600000
+                  message.time.getTime() + 3600000
                 ).toLocaleTimeString()}`}{" "}
             - {message.time.toLocaleTimeString()}
           </p>
