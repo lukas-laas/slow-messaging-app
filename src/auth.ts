@@ -20,7 +20,7 @@ export const authenticate = async (formData: FormData) => {
 
     if (password !== process.env.LOGIN_PASSWORD)
       throw new Error("Access denied");
-    const expires = new Date(Date.now() + 10 * 1000).valueOf();
+    const expires = new Date(Date.now() + 5 * 60 * 1000).valueOf();
 
     cookies().set(
       "session",

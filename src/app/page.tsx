@@ -15,7 +15,9 @@ export default async function Home() {
             <strong>{message.username}: </strong>{" "}
             {message.message
               ? message.message
-              : `Message available at ${new Date(message.time + 3600000)}`}{" "}
+              : `Message available at ${new Date(
+                  message.time + 3600000
+                ).toLocaleTimeString()}`}{" "}
             - {message.time.toLocaleTimeString()}
           </p>
         ))
