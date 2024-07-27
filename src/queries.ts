@@ -4,6 +4,7 @@ import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import * as schema from "./schema";
 import { revalidatePath } from "next/cache";
+import { getSession } from "./auth";
 
 const dbUrl = process.env.DB_URL!;
 const client = postgres(dbUrl);
@@ -23,12 +24,14 @@ export const getAllMessages = async () => {
 };
 
 export const postMessage = async (formData: FormData) => {
+  const session = await getSession();
+
   const message = formData.get("message")!.toString();
   const data = {
     id: mockdb.length.toString(),
     message: message,
     time: new Date(),
-    username: "Tomas",
+    username: session.user,
   };
   mockdb.push(data);
   revalidatePath("/");

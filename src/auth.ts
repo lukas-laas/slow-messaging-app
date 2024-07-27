@@ -10,7 +10,7 @@ export const authenticate = async (formData: FormData) => {
     const username = formData.get("username");
     if (password !== process.env.LOGIN_PASSWORD)
       throw new Error("Access denied");
-    const expires = new Date(Date.now() + 60 * 60 * 1000);
+    const expires = new Date(Date.now() + 10 * 1000).valueOf();
 
     //Not encrypting for this assignment for the sake of simplicity.
     cookies().set(
@@ -26,5 +26,16 @@ export const authenticate = async (formData: FormData) => {
     console.log(error.message);
   }
   //Redirects should be placed outside try catch according to Next documentation.
-  if (access) redirect("/messages");
+  if (access) redirect("/");
+};
+
+export const getSession = async () => {
+  const sessionCookie = cookies().get("session")?.value;
+  if (!sessionCookie) {
+    return null;
+  }
+  const session = await JSON.parse(sessionCookie);
+  console.log(session);
+  console.log(sessionCookie);
+  return session;
 };
