@@ -1,5 +1,6 @@
 import { getAllMessages } from "@/queries";
 import MessageForm from "./_components/message-form";
+import LogOut from "./_components/log-out";
 
 export default async function Home() {
   const messages = await getAllMessages();
@@ -7,6 +8,7 @@ export default async function Home() {
   return (
     <main>
       <h1>Slow-messaging</h1>
+      <LogOut />
       {messages.length ? (
         messages.map((message) => (
           <p key={message.id}>

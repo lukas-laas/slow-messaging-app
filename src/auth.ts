@@ -39,6 +39,11 @@ export const authenticate = async (formData: FormData) => {
   if (access) redirect("/");
 };
 
+export const logOut = () => {
+  cookies().delete("session");
+  redirect("/login");
+};
+
 export const getSession = async () => {
   const sessionCookie = cookies().get("session")?.value;
   if (!sessionCookie) {
