@@ -6,7 +6,7 @@ import * as schema from "./schema";
 import { revalidatePath } from "next/cache";
 import { getSession } from "./auth";
 import z from "zod";
-import { filterMessages } from "./utils";
+import { filterMessages, getLastestFetch } from "./utils";
 
 const Message = z.string().max(255).min(1);
 
@@ -47,15 +47,7 @@ const mockFetches = [
 export const getAllMessages = async () => {
   const session = await getSession();
 
-  const userFetches = mockFetches.filter(
-    (fetch) => fetch.username == session.user
-  );
-
-  const lastFetch = userFetches.length
-    ? userFetches.reduce((a, b) =>
-        a.time.getTime() > b.time.getTime() ? a : b
-      ).time
-    : new Date(0);
+  const lastFetch = getLastestFetch(mockFetches, session);
 
   const messages = await mockMessages;
   const filteredMessages = filterMessages(messages, session, lastFetch);
@@ -79,8 +71,18 @@ export const postMessage = async (formData: FormData) => {
 };
 
 export const refetchData = async () => {
-  const { user } = await getSession();
-  mockFetches.push({ username: user, time: new Date(), type: "daily" });
+  const session = await getSession();
 
-  revalidatePath("/");
+  const lastFetch = getLastestFetch(mockFetches, session);
+  const today = new Date();
+  today.setUTCHours(0, 0, 0, 0);
+  if (lastFetch < today.getDate()) {
+    mockFetches.push({
+      username: session.user,
+      time: new Date(),
+      type: "daily",
+    });
+    return revalidatePath("/");
+  }
+  return console.log("out of fetches");
 };

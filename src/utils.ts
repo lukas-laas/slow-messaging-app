@@ -19,3 +19,14 @@ export const filterMessages = (
   });
   return filtered;
 };
+
+export const getLastestFetch = (fetches, session) => {
+  const userFetches = fetches.filter((fetch) => fetch.username == session.user);
+
+  const lastFetch = userFetches.length
+    ? userFetches.reduce((a, b) =>
+        a.time.getTime() > b.time.getTime() ? a : b
+      ).time
+    : new Date(0);
+  return lastFetch;
+};
