@@ -15,7 +15,7 @@ const client = postgres(dbUrl);
 
 const db = drizzle(client, { schema });
 
-const mockdb = [
+const mockMessages = [
   {
     id: "1",
     message: "Hej!!",
@@ -26,12 +26,30 @@ const mockdb = [
   { id: "3", message: "Hur mår du?", time: new Date(), username: "Stig" },
 ];
 
+const mockFetches = [
+  {
+    username: "Stig",
+    type: "daily",
+    time: new Date(1722101712000),
+  },
+  {
+    username: "Stig",
+    type: "weekly",
+    time: new Date(1722101713000),
+  },
+  {
+    username: "Stig",
+    type: "weekly",
+    time: new Date(1722101714000),
+  },
+];
+
 export const getAllMessages = async () => {
   //const messages = await db.query.messages.findMany();
   const timeNow = new Date();
   const session = await getSession();
 
-  const messages = await mockdb;
+  const messages = await mockMessages;
   const filteredMessages = filterMessages(messages, session, timeNow);
   return filteredMessages;
 };
@@ -43,7 +61,7 @@ export const postMessage = async (formData: FormData) => {
   Message.safeParse(message);
 
   const data = {
-    id: mockdb.length.toString(),
+    id: mockMessages.length.toString(),
     message: message,
     time: new Date(),
     username: session.user,

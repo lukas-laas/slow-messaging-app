@@ -1,18 +1,24 @@
 import { getAllMessages } from "@/queries";
 import MessageForm from "./_components/message-form";
 import LogOut from "./_components/log-out";
+import { getSession } from "@/auth";
 
 export default async function Home() {
   const messages = await getAllMessages();
+  const session = await getSession();
 
   return (
-    <main>
+    <main className="flex flex-col">
       <h1>Slow-messaging</h1>
       <LogOut />
       {messages.length ? (
         messages.map((message) => (
-          <p key={message.id}>
-            <strong>{message.username}: </strong>{" "}
+          <p
+            key={message.id}
+            className={message.username == session.user ? "self-end" : ""}
+          >
+            <strong>{message.username}: </strong>
+            <br />
             {message.message
               ? message.message
               : `Message available at ${new Date(
