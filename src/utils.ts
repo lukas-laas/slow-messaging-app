@@ -10,9 +10,9 @@ export const filterMessages = (
 ) => {
   const filtered = messages.map((message) => {
     const { id, time, username } = message;
-    if (username == session.username) return message;
+    if (username == session.user) return message;
+    if (timeNow.getTime() < time) return;
     if (timeNow.getTime() - time < 3600000) {
-      console.log(timeNow.getTime(), time.getTime(), message.message);
       return { id: id, time: time, username: username };
     }
     return message;

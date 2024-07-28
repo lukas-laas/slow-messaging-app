@@ -2,7 +2,7 @@
 
 import { authenticate } from "@/auth";
 
-export default async function Login() {
+export default function Login() {
   return (
     <main>
       <h1>Sign in</h1>

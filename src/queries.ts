@@ -45,12 +45,20 @@ const mockFetches = [
 ];
 
 export const getAllMessages = async () => {
-  //const messages = await db.query.messages.findMany();
-  const timeNow = new Date();
   const session = await getSession();
 
+  const userFetches = mockFetches.filter(
+    (fetch) => fetch.username == session.user
+  );
+
+  const lastFetch = userFetches.length
+    ? userFetches.reduce((a, b) =>
+        a.time.getTime() > b.time.getTime() ? a : b
+      ).time
+    : new Date(0);
+
   const messages = await mockMessages;
-  const filteredMessages = filterMessages(messages, session, timeNow);
+  const filteredMessages = filterMessages(messages, session, lastFetch);
   return filteredMessages;
 };
 
@@ -66,6 +74,6 @@ export const postMessage = async (formData: FormData) => {
     time: new Date(),
     username: session.user,
   };
-  mockdb.push(data);
+  mockMessages.push(data);
   revalidatePath("/");
 };
