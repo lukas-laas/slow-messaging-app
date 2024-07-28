@@ -30,3 +30,28 @@ export const getLastestFetch = (fetches, session) => {
     : new Date(0);
   return lastFetch;
 };
+
+export const getLastestDailyFetch = (fetches, session) => {
+  const userFetches = fetches.filter(
+    (fetch) => fetch.username == session.user && fetch.type == "daily"
+  );
+
+  const lastDailyFetch = userFetches.length
+    ? userFetches.reduce((a, b) =>
+        a.time.getTime() > b.time.getTime() ? a : b
+      ).time
+    : new Date(0);
+  return lastDailyFetch;
+};
+
+export const getSecondWeeklyFetch = (fetches, session) => {
+  const userFetches = fetches
+    .filter((fetch) => fetch.username == session.user && fetch.type == "weekly")
+    .sort((a, b) => a.time - b.time);
+
+  if (userFetches.length < 2) return new Date(0);
+
+  const secondWeeklyFetch = userFetches[userFetches.length - 2];
+
+  return secondWeeklyFetch.time;
+};

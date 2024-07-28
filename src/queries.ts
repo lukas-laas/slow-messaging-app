@@ -6,7 +6,12 @@ import * as schema from "./schema";
 import { revalidatePath } from "next/cache";
 import { getSession } from "./auth";
 import z from "zod";
-import { filterMessages, getLastestFetch } from "./utils";
+import {
+  filterMessages,
+  getLastestDailyFetch,
+  getLastestFetch,
+  getSecondWeeklyFetch,
+} from "./utils";
 
 const Message = z.string().max(255).min(1);
 
@@ -73,14 +78,31 @@ export const postMessage = async (formData: FormData) => {
 export const refetchData = async () => {
   const session = await getSession();
 
-  const lastFetch = getLastestFetch(mockFetches, session);
+  const lastDailyFetch = getLastestDailyFetch(mockFetches, session);
+  const secondLastWeeklyFetch = getSecondWeeklyFetch(mockFetches, session);
+
+  // js date functions behave a bit strange so operations múst be seperated
   const today = new Date();
   today.setUTCHours(0, 0, 0, 0);
-  if (lastFetch < today.getDate()) {
+
+  const sunday = new Date();
+  sunday.setDate(sunday.getDate() - sunday.getDay());
+  sunday.setUTCHours(0, 0, 0, 0);
+
+  if (lastDailyFetch < today.getDate()) {
     mockFetches.push({
       username: session.user,
       time: new Date(),
       type: "daily",
+    });
+    return revalidatePath("/");
+  }
+
+  if (secondLastWeeklyFetch < sunday.getDate()) {
+    mockFetches.push({
+      username: session.user,
+      time: new Date(),
+      type: "weekly",
     });
     return revalidatePath("/");
   }
