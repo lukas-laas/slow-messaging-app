@@ -1,10 +1,5 @@
 import { FetchSelect, Message, Session } from "./definitions";
 
-export const multiplyByTwo = (num: number) => {
-  const multiplied = num * 2;
-  return multiplied;
-};
-
 export const filterMessages = (
   messages: Message[],
   user: string,
