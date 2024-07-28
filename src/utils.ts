@@ -60,3 +60,32 @@ export const getSecondWeeklyFetch = (fetches: Fetch[], session: Session) => {
 
   return secondWeeklyFetch.time;
 };
+
+export const getUsersStats = async () => {
+  return [
+    {
+      username: "Stig",
+      messages: 4,
+      sentPerFetch: 2.5,
+      newMessages: 3.55,
+    },
+    {
+      username: "Stig",
+      messages: 4,
+      sentPerFetch: 2.5,
+      newMessages: 3.55,
+    },
+    {
+      username: "Stig",
+      messages: 4,
+      sentPerFetch: 2.5,
+      newMessages: 3.55,
+    },
+    {
+      username: "Stig",
+      messages: 4,
+      sentPerFetch: 2.5,
+      newMessages: 3.55,
+    },
+  ];
+};
