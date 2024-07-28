@@ -20,3 +20,4 @@ Written by Lukas Låås
 - run: pnpm run build
 - run: pnpm run start
 - Password: 123456
+- Statistics page can be found at /statistics
