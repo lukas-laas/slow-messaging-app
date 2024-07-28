@@ -2,6 +2,7 @@ import {
   filterMessages,
   getLastestDailyFetch,
   getSecondWeeklyFetch,
+  getUserStats,
   multiplyByTwo,
 } from "../src/utils";
 import { expect, test } from "vitest";
@@ -90,4 +91,15 @@ test("Should be able to get second latest weekly fetch", () => {
   expect(getSecondWeeklyFetch(fetches, session)).toEqual(
     new Date(1722101713000)
   );
+});
+
+test("Should return correct statistics", () => {
+  expect(
+    getUserStats(messages, "Stig", new Date(1722101712000 + 3000000), fetches)
+  ).toEqual({
+    username: "Stig",
+    messages: 2,
+    sentPerFetch: "0.50",
+    newMessages: "0.25",
+  });
 });

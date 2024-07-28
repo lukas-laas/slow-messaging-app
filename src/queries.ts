@@ -91,9 +91,10 @@ export const postMessage = async (formData: FormData) => {
 
 export const refetchData = async () => {
   const session = await getSession();
+  const fetches = await mockFetches;
 
-  const lastDailyFetch = getLastestDailyFetch(mockFetches, session);
-  const secondLastWeeklyFetch = getSecondWeeklyFetch(mockFetches, session);
+  const lastDailyFetch = getLastestDailyFetch(fetches, session);
+  const secondLastWeeklyFetch = getSecondWeeklyFetch(fetches, session);
 
   // js date functions behave a bit strange so operations múst be seperated
   const today = new Date();
@@ -125,18 +126,22 @@ export const refetchData = async () => {
 };
 
 export const getUsersStats = async () => {
-  const fetches = await mockFetches;
-  const messages = await mockMessages;
+  try {
+    const fetches = await mockFetches;
+    const messages = await mockMessages;
 
-  let usernames = Array.from(new Set(fetches.map((fetch) => fetch.username)));
+    const usernames = Array.from(
+      new Set(fetches.map((fetch) => fetch.username))
+    );
 
-  const users = usernames.map((username) => {
-    const lastFetch = getLastestFetch(fetches, username);
+    const stats = usernames.map((username) => {
+      const lastFetch = getLastestFetch(fetches, username);
 
-    const stats = getUserStats(messages, username, lastFetch, fetches);
+      return getUserStats(messages, username, lastFetch, fetches);
+    });
 
     return stats;
-  });
-
-  return users;
+  } catch (error) {
+    console.log("Failed to fetch from database");
+  }
 };
