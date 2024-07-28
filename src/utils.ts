@@ -1,3 +1,5 @@
+import { Fetch, Session } from "./definitions";
+
 export const multiplyByTwo = (num: number) => {
   const multiplied = num * 2;
   return multiplied;
@@ -20,7 +22,7 @@ export const filterMessages = (
   return filtered;
 };
 
-export const getLastestFetch = (fetches, session) => {
+export const getLastestFetch = (fetches: Fetch[], session: Session) => {
   const userFetches = fetches.filter((fetch) => fetch.username == session.user);
 
   const lastFetch = userFetches.length
@@ -31,7 +33,7 @@ export const getLastestFetch = (fetches, session) => {
   return lastFetch;
 };
 
-export const getLastestDailyFetch = (fetches, session) => {
+export const getLastestDailyFetch = (fetches: Fetch[], session: Session) => {
   const userFetches = fetches.filter(
     (fetch) => fetch.username == session.user && fetch.type == "daily"
   );
@@ -44,10 +46,10 @@ export const getLastestDailyFetch = (fetches, session) => {
   return lastDailyFetch;
 };
 
-export const getSecondWeeklyFetch = (fetches, session) => {
+export const getSecondWeeklyFetch = (fetches: Fetch[], session: Session) => {
   const userFetches = fetches
     .filter((fetch) => fetch.username == session.user && fetch.type == "weekly")
-    .sort((a, b) => a.time - b.time);
+    .sort((a, b) => a.time.getTime() - b.time.getTime());
 
   if (userFetches.length < 2) return new Date(0);
 

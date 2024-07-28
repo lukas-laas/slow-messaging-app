@@ -89,7 +89,7 @@ export const refetchData = async () => {
   sunday.setDate(sunday.getDate() - sunday.getDay());
   sunday.setUTCHours(0, 0, 0, 0);
 
-  if (lastDailyFetch < today.getDate()) {
+  if (lastDailyFetch < today) {
     mockFetches.push({
       username: session.user,
       time: new Date(),
@@ -98,7 +98,7 @@ export const refetchData = async () => {
     return revalidatePath("/");
   }
 
-  if (secondLastWeeklyFetch < sunday.getDate()) {
+  if (secondLastWeeklyFetch < sunday) {
     mockFetches.push({
       username: session.user,
       time: new Date(),

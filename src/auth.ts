@@ -20,7 +20,7 @@ export const authenticate = async (formData: FormData) => {
 
     if (password !== process.env.LOGIN_PASSWORD)
       throw new Error("Access denied");
-    const expires = new Date(Date.now() + 5 * 60 * 1000).valueOf();
+    const expires = new Date(Date.now() + 5 * 60 * 1000).getTime();
 
     cookies().set(
       "session",
@@ -32,7 +32,7 @@ export const authenticate = async (formData: FormData) => {
     );
     access = true;
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
   }
   if (access) redirect("/");
 };
