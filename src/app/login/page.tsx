@@ -23,7 +23,7 @@ export default function Login() {
 
           <button
             type="submit"
-            className="w-fit p-1 rounded-sm bg-green-400 hover:bg-green-300"
+            className="w-fit p-1 rounded-sm bg-green-400 hover:bg-green-300 transition-colors"
           >
             Sign in
           </button>

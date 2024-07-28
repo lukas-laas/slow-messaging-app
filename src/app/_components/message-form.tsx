@@ -15,7 +15,7 @@ export default function MessageForm() {
       />
       <button
         type="submit"
-        className="bg-green-400 hover:bg-green-300 rounded-md p-1"
+        className="bg-green-400 hover:bg-green-300 rounded-md p-1 transition-colors"
       >
         Send
       </button>
