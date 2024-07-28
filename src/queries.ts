@@ -85,6 +85,7 @@ export const postMessage = async (formData: FormData) => {
     username: session.user,
   };
   mockMessages.push(data);
+  revalidatePath("/statistics");
   revalidatePath("/");
 };
 
@@ -117,6 +118,7 @@ export const refetchData = async () => {
       time: new Date(),
       type: "weekly",
     });
+    revalidatePath("/statistics");
     return revalidatePath("/");
   }
   return console.log("out of fetches");
