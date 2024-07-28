@@ -27,7 +27,19 @@ const mockMessages = [
     time: new Date(1722101712000),
     username: "Stig",
   },
-  { id: "2", message: "Tjena!", time: new Date(), username: "Tomas" },
+  {
+    id: "2",
+    message: "Tjena!",
+    time: new Date(1722101712000),
+    username: "Tomas",
+  },
+  {
+    id: "3",
+    message: "Hur mår du?",
+    time: new Date(1722101712000),
+    username: "Stig",
+  },
+  { id: "3", message: "Hur mår du?", time: new Date(), username: "Stig" },
   { id: "3", message: "Hur mår du?", time: new Date(), username: "Stig" },
 ];
 
@@ -52,10 +64,10 @@ const mockFetches = [
 export const getAllMessages = async () => {
   const session = await getSession();
 
-  const lastFetch = getLastestFetch(mockFetches, session);
+  const lastFetch = getLastestFetch(mockFetches, session.user);
 
   const messages = await mockMessages;
-  const filteredMessages = filterMessages(messages, session, lastFetch);
+  const filteredMessages = filterMessages(messages, session.user, lastFetch);
   return filteredMessages;
 };
 
@@ -107,4 +119,44 @@ export const refetchData = async () => {
     return revalidatePath("/");
   }
   return console.log("out of fetches");
+};
+
+export const getUsersStats = async () => {
+  const fetches = await mockFetches;
+  const messages = await mockMessages;
+
+  let usernames = Array.from(new Set(fetches.map((fetch) => fetch.username)));
+
+  const users = usernames.map((username) => {
+    const lastFetch = getLastestFetch(fetches, username);
+
+    const filteredMessages = filterMessages(
+      messages,
+      username,
+      lastFetch
+    ).filter((message) => message.username != username);
+    console.log(username, filteredMessages);
+
+    const userMessages = messages.filter(
+      (message) => message.username == username
+    );
+
+    const userFetches = fetches.filter((fetch) => fetch.username == username);
+
+    const sentPerMessage =
+      userFetches.length != 0 ? userMessages.length / userFetches.length : 0;
+
+    const newMessages = filteredMessages.length / userFetches.length;
+
+    const stats = {
+      username: username,
+      messages: userMessages.length,
+      sentPerFetch: sentPerMessage.toFixed(2),
+      newMessages: newMessages.toFixed(2),
+    };
+
+    return stats;
+  });
+
+  return users;
 };

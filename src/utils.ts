@@ -6,17 +6,17 @@ export const multiplyByTwo = (num: number) => {
 };
 
 export const filterMessages = (
-  messages: any[],
-  session: any,
+  messages: Message[],
+  user: string,
   timeNow: Date
 ) => {
   const filtered: Message[] = [];
 
   messages.forEach((message) => {
     const { id, time, username } = message;
-    if (username == session.user) return filtered.push(message);
-    if (timeNow.getTime() < time) return;
-    if (timeNow.getTime() - time < 3600000) {
+    if (username == user) return filtered.push(message);
+    if (timeNow.getTime() < time.getTime()) return;
+    if (timeNow.getTime() - time.getTime() < 3600000) {
       return filtered.push({ id: id, time: time, username: username });
     }
     return filtered.push(message);
@@ -25,8 +25,8 @@ export const filterMessages = (
   return filtered;
 };
 
-export const getLastestFetch = (fetches: Fetch[], session: Session) => {
-  const userFetches = fetches.filter((fetch) => fetch.username == session.user);
+export const getLastestFetch = (fetches: Fetch[], user: string) => {
+  const userFetches = fetches.filter((fetch) => fetch.username == user);
 
   const lastFetch = userFetches.length
     ? userFetches.reduce((a, b) =>
@@ -59,33 +59,4 @@ export const getSecondWeeklyFetch = (fetches: Fetch[], session: Session) => {
   const secondWeeklyFetch = userFetches[userFetches.length - 2];
 
   return secondWeeklyFetch.time;
-};
-
-export const getUsersStats = async () => {
-  return [
-    {
-      username: "Stig",
-      messages: 4,
-      sentPerFetch: 2.5,
-      newMessages: 3.55,
-    },
-    {
-      username: "Stig",
-      messages: 4,
-      sentPerFetch: 2.5,
-      newMessages: 3.55,
-    },
-    {
-      username: "Stig",
-      messages: 4,
-      sentPerFetch: 2.5,
-      newMessages: 3.55,
-    },
-    {
-      username: "Stig",
-      messages: 4,
-      sentPerFetch: 2.5,
-      newMessages: 3.55,
-    },
-  ];
 };

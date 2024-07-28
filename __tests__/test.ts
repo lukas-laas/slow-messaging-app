@@ -61,7 +61,7 @@ const session = {
 
 test("Messages on cooldown should not have message attribute", () => {
   expect(
-    filterMessages(messages, session, new Date(1722101712000 + 3000000))[1]
+    filterMessages(messages, session.user, new Date(1722101712000 + 3000000))[1]
   ).toEqual({
     id: "2",
     time: new Date(1722101712000),
@@ -71,7 +71,7 @@ test("Messages on cooldown should not have message attribute", () => {
 
 test("User should always see their own messages", () => {
   expect(
-    filterMessages(messages, session, new Date(1722101712000 + 3000000))[2]
+    filterMessages(messages, session.user, new Date(1722101712000 + 3000000))[2]
   ).toEqual({
     id: "3",
     message: "Hur mår du?",
