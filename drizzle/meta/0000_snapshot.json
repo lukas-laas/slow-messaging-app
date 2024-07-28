@@ -1,9 +1,45 @@
 {
-  "id": "268cbadc-bd2e-46ce-b7f5-e4cc57dea658",
+  "id": "bcf496c3-ac09-4c55-a014-4b161e4a2734",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
+    "public.fetches": {
+      "name": "fetches",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "username": {
+          "name": "username",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "time": {
+          "name": "time",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "public.messages": {
       "name": "messages",
       "schema": "",
@@ -11,8 +47,8 @@
         "id": {
           "name": "id",
           "type": "uuid",
-          "primaryKey": false,
-          "notNull": false,
+          "primaryKey": true,
+          "notNull": true,
           "default": "gen_random_uuid()"
         },
         "message": {
@@ -25,14 +61,14 @@
           "name": "time",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "now()"
         },
-        "userId": {
-          "name": "userId",
-          "type": "uuid",
+        "username": {
+          "name": "username",
+          "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         }
       },
       "indexes": {},

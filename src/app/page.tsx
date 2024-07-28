@@ -13,7 +13,7 @@ export default async function Home() {
       <h1>Slow-messaging</h1>
       <LogOut />
       <div className="h-max overflow-y-auto flex flex-col">
-        {messages.length ? (
+        {messages && messages.length ? (
           messages.map((message) => (
             <p
               key={message.id}

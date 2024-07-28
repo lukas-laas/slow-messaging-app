@@ -1,4 +1,4 @@
-import { Fetch, Message, Session } from "./definitions";
+import { FetchSelect, Message, Session } from "./definitions";
 
 export const multiplyByTwo = (num: number) => {
   const multiplied = num * 2;
@@ -17,15 +17,19 @@ export const filterMessages = (
     if (username == user) return filtered.push(message);
     if (timeNow.getTime() < time.getTime()) return;
     if (timeNow.getTime() - time.getTime() < 3600000) {
-      return filtered.push({ id: id, time: time, username: username });
+      return filtered.push({
+        id: id,
+        time: time,
+        username: username,
+        message: null,
+      });
     }
     return filtered.push(message);
   });
-  console.log(filtered[1]);
-  return filtered;
+  return filtered.sort((a, b) => a.time.getTime() - b.time.getTime());
 };
 
-export const getLastestFetch = (fetches: Fetch[], user: string) => {
+export const getLastestFetch = (fetches: FetchSelect[], user: string) => {
   const userFetches = fetches.filter((fetch) => fetch.username == user);
 
   const lastFetch = userFetches.length
@@ -36,7 +40,10 @@ export const getLastestFetch = (fetches: Fetch[], user: string) => {
   return lastFetch;
 };
 
-export const getLastestDailyFetch = (fetches: Fetch[], session: Session) => {
+export const getLastestDailyFetch = (
+  fetches: FetchSelect[],
+  session: Session
+) => {
   const userFetches = fetches.filter(
     (fetch) => fetch.username == session.user && fetch.type == "daily"
   );
@@ -49,7 +56,10 @@ export const getLastestDailyFetch = (fetches: Fetch[], session: Session) => {
   return lastDailyFetch;
 };
 
-export const getSecondWeeklyFetch = (fetches: Fetch[], session: Session) => {
+export const getSecondWeeklyFetch = (
+  fetches: FetchSelect[],
+  session: Session
+) => {
   const userFetches = fetches
     .filter((fetch) => fetch.username == session.user && fetch.type == "weekly")
     .sort((a, b) => a.time.getTime() - b.time.getTime());
@@ -65,12 +75,11 @@ export const getUserStats = (
   messages: Message[],
   username: string,
   lastFetch: Date,
-  fetches: Fetch[]
+  fetches: FetchSelect[]
 ) => {
   const filteredMessages = filterMessages(messages, username, lastFetch).filter(
-    (message) => message.username != username
+    (message) => message.username != username && message.message != null
   );
-  console.log(username, filteredMessages);
 
   const userMessages = messages.filter(
     (message) => message.username == username

@@ -21,114 +21,80 @@ const client = postgres(dbUrl);
 
 const db = drizzle(client, { schema });
 
-const mockMessages = [
-  {
-    id: "1",
-    message: "Hej!!",
-    time: new Date(1722101712000),
-    username: "Stig",
-  },
-  {
-    id: "2",
-    message: "Tjena!",
-    time: new Date(1722101712000),
-    username: "Tomas",
-  },
-  {
-    id: "3",
-    message: "Hur mår du?",
-    time: new Date(1722101712000),
-    username: "Stig",
-  },
-  { id: "3", message: "Hur mår du?", time: new Date(), username: "Stig" },
-  { id: "3", message: "Hur mår du?", time: new Date(), username: "Stig" },
-];
-
-const mockFetches = [
-  {
-    username: "Stig",
-    type: "daily",
-    time: new Date(1722101712000),
-  },
-  {
-    username: "Stig",
-    type: "weekly",
-    time: new Date(1722101713000),
-  },
-  {
-    username: "Tomas",
-    type: "daily",
-    time: new Date(1722106012000),
-  },
-];
-
 export const getAllMessages = async () => {
-  const session = await getSession();
+  try {
+    const session = await getSession();
+    const messages = await db.query.messages.findMany();
+    const fetches = await db.query.fetches.findMany();
 
-  const lastFetch = getLastestFetch(mockFetches, session.user);
+    const lastFetch = getLastestFetch(fetches, session.user);
 
-  const messages = await mockMessages;
-  const filteredMessages = filterMessages(messages, session.user, lastFetch);
-  return filteredMessages;
+    const filteredMessages = filterMessages(messages, session.user, lastFetch);
+    return filteredMessages;
+  } catch (error) {
+    console.log("Failed to get messages");
+  }
 };
 
 export const postMessage = async (formData: FormData) => {
-  const session = await getSession();
+  try {
+    const session = await getSession();
 
-  const message = formData.get("message")!.toString();
-  Message.safeParse(message);
+    const message = formData.get("message")!.toString();
+    Message.safeParse(message);
 
-  const data = {
-    id: mockMessages.length.toString(),
-    message: message,
-    time: new Date(),
-    username: session.user,
-  };
-  mockMessages.push(data);
+    const data = {
+      message: message,
+      username: session.user,
+    };
+
+    await db.insert(schema.messages).values(data);
+  } catch (error) {
+    console.log("Failed to post message");
+  }
   revalidatePath("/statistics");
   revalidatePath("/");
 };
 
 export const refetchData = async () => {
-  const session = await getSession();
-  const fetches = await mockFetches;
+  try {
+    const session = await getSession();
+    const fetches = await db.query.fetches.findMany();
 
-  const lastDailyFetch = getLastestDailyFetch(fetches, session);
-  const secondLastWeeklyFetch = getSecondWeeklyFetch(fetches, session);
+    const lastDailyFetch = getLastestDailyFetch(fetches, session);
+    const secondLastWeeklyFetch = getSecondWeeklyFetch(fetches, session);
 
-  // js date functions behave a bit strange so operations múst be seperated
-  const today = new Date();
-  today.setUTCHours(0, 0, 0, 0);
+    // js date functions behave a bit strange so operations múst be seperated
+    const today = new Date();
+    today.setUTCHours(0, 0, 0, 0);
 
-  const sunday = new Date();
-  sunday.setDate(sunday.getDate() - sunday.getDay());
-  sunday.setUTCHours(0, 0, 0, 0);
+    const sunday = new Date();
+    sunday.setDate(sunday.getDate() - sunday.getDay());
+    sunday.setUTCHours(0, 0, 0, 0);
 
-  if (lastDailyFetch < today) {
-    mockFetches.push({
-      username: session.user,
-      time: new Date(),
-      type: "daily",
-    });
-    return revalidatePath("/");
+    if (lastDailyFetch < today) {
+      await db.insert(schema.fetches).values({
+        username: session.user,
+        type: "daily",
+      });
+    } else if (secondLastWeeklyFetch < sunday) {
+      await db.insert(schema.fetches).values({
+        username: session.user,
+        type: "weekly",
+      });
+    } else console.log("Out of fetches");
+  } catch (error) {
+    console.log("Failed to refetch");
   }
 
-  if (secondLastWeeklyFetch < sunday) {
-    mockFetches.push({
-      username: session.user,
-      time: new Date(),
-      type: "weekly",
-    });
-    revalidatePath("/statistics");
-    return revalidatePath("/");
-  }
-  return console.log("out of fetches");
+  revalidatePath("/statistics");
+  revalidatePath("/");
 };
 
 export const getUsersStats = async () => {
   try {
-    const fetches = await mockFetches;
-    const messages = await mockMessages;
+    const fetches = await db.query.fetches.findMany();
+    const messages = await db.query.messages.findMany();
 
     const usernames = Array.from(
       new Set(fetches.map((fetch) => fetch.username))

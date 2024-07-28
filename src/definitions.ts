@@ -1,15 +1,10 @@
-export type Fetch = {
-  username: string;
-  type: string;
-  time: Date;
-};
+import { InferInsertModel, InferSelectModel } from "drizzle-orm";
+import { fetches, messages } from "./schema";
 
-export type Message = {
-  id: string;
-  message?: string;
-  time: Date;
-  username: string;
-};
+export type FetchSelect = InferSelectModel<typeof fetches>;
+export type FetchInsert = InferInsertModel<typeof fetches>;
+
+export type Message = InferSelectModel<typeof messages>;
 
 export type Session = {
   user: string;

@@ -17,14 +17,15 @@ export default async function Statistics() {
           </tr>
         </thead>
         <tbody>
-          {users.map((user) => (
-            <tr key={user.username}>
-              <td className="border border-black">{user.username}</td>
-              <td className="border border-black">{user.messages}</td>
-              <td className="border border-black">{user.sentPerFetch}</td>
-              <td className="border border-black">{user.newMessages}</td>
-            </tr>
-          ))}
+          {users &&
+            users.map((user) => (
+              <tr key={user.username}>
+                <td className="border border-black">{user.username}</td>
+                <td className="border border-black">{user.messages}</td>
+                <td className="border border-black">{user.sentPerFetch}</td>
+                <td className="border border-black">{user.newMessages}</td>
+              </tr>
+            ))}
         </tbody>
       </table>
     </>

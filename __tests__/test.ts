@@ -34,21 +34,25 @@ const messages = [
 
 const fetches = [
   {
+    id: "3",
     username: "Stig",
     type: "daily",
     time: new Date(1722101712000),
   },
   {
+    id: "3",
     username: "Stig",
     type: "weekly",
     time: new Date(1722101713000),
   },
   {
+    id: "3",
     username: "Stig",
     type: "weekly",
     time: new Date(1722201713000),
   },
   {
+    id: "3",
     username: "Stig",
     type: "daily",
     time: new Date(1722106012000),
@@ -60,13 +64,14 @@ const session = {
   expires: 2722106012000,
 };
 
-test("Messages on cooldown should not have message attribute", () => {
+test("Messages on cooldown should not have message", () => {
   expect(
     filterMessages(messages, session.user, new Date(1722101712000 + 3000000))[1]
   ).toEqual({
     id: "2",
     time: new Date(1722101712000),
     username: "Tomas",
+    message: null,
   });
 });
 
@@ -95,7 +100,7 @@ test("Should be able to get second latest weekly fetch", () => {
 
 test("Should return correct statistics", () => {
   expect(
-    getUserStats(messages, "Stig", new Date(1722101712000 + 3000000), fetches)
+    getUserStats(messages, "Stig", new Date(1722101712000 + 3600000), fetches)
   ).toEqual({
     username: "Stig",
     messages: 2,
