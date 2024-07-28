@@ -2,6 +2,7 @@ import { getAllMessages } from "@/queries";
 import MessageForm from "./_components/message-form";
 import LogOut from "./_components/log-out";
 import { getSession } from "@/auth";
+import FetchButton from "./_components/fetch-button";
 
 export default async function Home() {
   const messages = await getAllMessages();
@@ -36,6 +37,7 @@ export default async function Home() {
         )}
       </div>
       <div className="w-full absolute bottom-0">
+        <FetchButton />
         <MessageForm />
       </div>
     </main>

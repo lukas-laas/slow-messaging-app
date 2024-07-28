@@ -77,3 +77,10 @@ export const postMessage = async (formData: FormData) => {
   mockMessages.push(data);
   revalidatePath("/");
 };
+
+export const refetchData = async () => {
+  const { user } = await getSession();
+  mockFetches.push({ username: user, time: new Date(), type: "daily" });
+
+  revalidatePath("/");
+};
