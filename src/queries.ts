@@ -105,6 +105,7 @@ export const getUsersStats = async () => {
 
       return getUserStats(messages, username, lastFetch, fetches);
     });
+    console.log(stats);
 
     return stats;
   } catch (error) {

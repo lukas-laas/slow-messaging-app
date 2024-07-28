@@ -7,34 +7,36 @@ import FetchButton from "./_components/fetch-button";
 export default async function Home() {
   const messages = await getAllMessages();
   const session = await getSession();
-
   return (
-    <main className="flex flex-col max-h-screen">
-      <h1>Slow-messaging</h1>
-      <LogOut />
-      <div className="h-max overflow-y-auto flex flex-col">
+    <main className="flex flex-col max-h-screen h-full max-w-lg mx-auto shadow-md">
+      <nav className="flex justify-between p-2 border-b border-solid border-neutral-400">
+        <h1 className="text-xl">{session.user}</h1>
+        <LogOut />
+      </nav>
+      <ul className="h-max overflow-y-auto flex flex-col h-full gap-2 p-2 bg-white">
         {messages && messages.length ? (
           messages.map((message) => (
-            <p
+            <li
               key={message.id}
-              className={message.username == session.user ? "self-end" : ""}
+              className={`${
+                message.username == session.user ? "self-end" : ""
+              } bg-green-400 max-w-72 p-2 rounded-md`}
             >
-              <strong>{message.username}: </strong>
+              <strong>{message.username} </strong>
+              {message.time.toLocaleTimeString()}
               <br />
               {message.message
                 ? message.message
                 : `Message available at ${new Date(
                     message.time.getTime() + 3600000
-                  ).toLocaleTimeString()}`}{" "}
-              - {message.time.toLocaleTimeString()}
-            </p>
+                  ).toLocaleTimeString()}`}
+            </li>
           ))
         ) : (
           <>No messages</>
         )}
-      </div>
-      <div className="w-full absolute bottom-0">
-        <FetchButton />
+      </ul>
+      <div className="w-full bottom-0">
         <MessageForm />
       </div>
     </main>

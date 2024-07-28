@@ -5,7 +5,7 @@ export default async function Statistics() {
   const users = await getUsersStats();
 
   return (
-    <>
+    <main className="mx-auto w-fit">
       <h1>User statistics</h1>
       <table>
         <thead>
@@ -28,6 +28,6 @@ export default async function Statistics() {
             ))}
         </tbody>
       </table>
-    </>
+    </main>
   );
 }
