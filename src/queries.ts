@@ -38,9 +38,9 @@ const mockFetches = [
     time: new Date(1722101713000),
   },
   {
-    username: "Stig",
-    type: "weekly",
-    time: new Date(1722101714000),
+    username: "Tomas",
+    type: "daily",
+    time: new Date(1722106012000),
   },
 ];
 
