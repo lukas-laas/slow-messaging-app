@@ -14,24 +14,21 @@ export default async function Home() {
       <LogOut />
       <div className="h-max overflow-y-auto flex flex-col">
         {messages.length ? (
-          messages.map(
-            (message) =>
-              message && (
-                <p
-                  key={message.id}
-                  className={message.username == session.user ? "self-end" : ""}
-                >
-                  <strong>{message.username}: </strong>
-                  <br />
-                  {message.message
-                    ? message.message
-                    : `Message available at ${new Date(
-                        message.time.getTime() + 3600000
-                      ).toLocaleTimeString()}`}{" "}
-                  - {message.time.toLocaleTimeString()}
-                </p>
-              )
-          )
+          messages.map((message) => (
+            <p
+              key={message.id}
+              className={message.username == session.user ? "self-end" : ""}
+            >
+              <strong>{message.username}: </strong>
+              <br />
+              {message.message
+                ? message.message
+                : `Message available at ${new Date(
+                    message.time.getTime() + 3600000
+                  ).toLocaleTimeString()}`}{" "}
+              - {message.time.toLocaleTimeString()}
+            </p>
+          ))
         ) : (
           <>No messages</>
         )}

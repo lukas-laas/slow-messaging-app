@@ -6,7 +6,7 @@ export type Fetch = {
 
 export type Message = {
   id: string;
-  message: string;
+  message?: string;
   time: Date;
   username: string;
 };

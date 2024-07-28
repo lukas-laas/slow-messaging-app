@@ -1,4 +1,4 @@
-import { Fetch, Session } from "./definitions";
+import { Fetch, Message, Session } from "./definitions";
 
 export const multiplyByTwo = (num: number) => {
   const multiplied = num * 2;
@@ -10,15 +10,18 @@ export const filterMessages = (
   session: any,
   timeNow: Date
 ) => {
-  const filtered = messages.map((message) => {
+  const filtered: Message[] = [];
+
+  messages.forEach((message) => {
     const { id, time, username } = message;
-    if (username == session.user) return message;
+    if (username == session.user) return filtered.push(message);
     if (timeNow.getTime() < time) return;
     if (timeNow.getTime() - time < 3600000) {
-      return { id: id, time: time, username: username };
+      return filtered.push({ id: id, time: time, username: username });
     }
-    return message;
+    return filtered.push(message);
   });
+  console.log(filtered[1]);
   return filtered;
 };
 
