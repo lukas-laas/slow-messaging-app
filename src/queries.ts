@@ -11,6 +11,7 @@ import {
   getLastestDailyFetch,
   getLastestFetch,
   getSecondWeeklyFetch,
+  getUserStats,
 } from "./utils";
 
 const Message = z.string().max(255).min(1);
@@ -130,30 +131,7 @@ export const getUsersStats = async () => {
   const users = usernames.map((username) => {
     const lastFetch = getLastestFetch(fetches, username);
 
-    const filteredMessages = filterMessages(
-      messages,
-      username,
-      lastFetch
-    ).filter((message) => message.username != username);
-    console.log(username, filteredMessages);
-
-    const userMessages = messages.filter(
-      (message) => message.username == username
-    );
-
-    const userFetches = fetches.filter((fetch) => fetch.username == username);
-
-    const sentPerMessage =
-      userFetches.length != 0 ? userMessages.length / userFetches.length : 0;
-
-    const newMessages = filteredMessages.length / userFetches.length;
-
-    const stats = {
-      username: username,
-      messages: userMessages.length,
-      sentPerFetch: sentPerMessage.toFixed(2),
-      newMessages: newMessages.toFixed(2),
-    };
+    const stats = getUserStats(messages, username, lastFetch, fetches);
 
     return stats;
   });

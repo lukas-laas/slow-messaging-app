@@ -60,3 +60,34 @@ export const getSecondWeeklyFetch = (fetches: Fetch[], session: Session) => {
 
   return secondWeeklyFetch.time;
 };
+
+export const getUserStats = (
+  messages: Message[],
+  username: string,
+  lastFetch: Date,
+  fetches: Fetch[]
+) => {
+  const filteredMessages = filterMessages(messages, username, lastFetch).filter(
+    (message) => message.username != username
+  );
+  console.log(username, filteredMessages);
+
+  const userMessages = messages.filter(
+    (message) => message.username == username
+  );
+
+  const userFetches = fetches.filter((fetch) => fetch.username == username);
+
+  const sentPerMessage =
+    userFetches.length != 0 ? userMessages.length / userFetches.length : 0;
+
+  const newMessages = filteredMessages.length / userFetches.length;
+
+  const stats = {
+    username: username,
+    messages: userMessages.length,
+    sentPerFetch: sentPerMessage.toFixed(2),
+    newMessages: newMessages.toFixed(2),
+  };
+  return stats;
+};

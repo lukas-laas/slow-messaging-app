@@ -12,7 +12,6 @@ export default async function Statistics() {
           <tr>
             <th className="border border-black p-1">Username</th>
             <th className="border border-black p-1">Sent</th>
-            <th className="border border-black p-1">Fetches</th>
             <th className="border border-black p-1">Sent / fetch</th>
             <th className="border border-black p-1">New / fetch</th>
           </tr>
@@ -22,7 +21,6 @@ export default async function Statistics() {
             <tr key={user.username}>
               <td className="border border-black">{user.username}</td>
               <td className="border border-black">{user.messages}</td>
-              <td className="border border-black">{user.fetches}</td>
               <td className="border border-black">{user.sentPerFetch}</td>
               <td className="border border-black">{user.newMessages}</td>
             </tr>
