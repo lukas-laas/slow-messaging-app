@@ -2,6 +2,19 @@
 
 Written by Lukas Låås
 
+### High level planning
+
+https://github.com/orgs/saltsthlm/projects/69
+
+0. Installing and making sure the flow works from db to frontend.
+1. Show data in frontend using a mocked db (Makes the structure easier to change).
+2. Add login functionality.
+3. Figure out logic for what messages to show and implementing.
+4. Add refetching + checks if user is allowed to refetch.
+5. Figure out functions for claculating stats and showing stats in table.
+6. Generate and migrate to postgres db.
+7. Clean up code and styling.
+
 ### Choices I made
 
 - Not encrypting cookies for this assignment for the sake of simplicity.
