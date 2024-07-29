@@ -16,7 +16,12 @@ export const authenticate = async (formData: FormData) => {
     const password = formData.get("password");
     const username = formData.get("username");
 
-    LoginSchema.safeParse({ username: username, password: password });
+    const valid = LoginSchema.safeParse({
+      username: username,
+      password: password,
+    });
+
+    if (valid.error) throw valid.error;
 
     if (password !== process.env.LOGIN_PASSWORD)
       throw new Error("Access denied");

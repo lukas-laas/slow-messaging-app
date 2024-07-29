@@ -41,8 +41,8 @@ export const postMessage = async (formData: FormData) => {
     const session = await getSession();
 
     const message = formData.get("message")!.toString();
-    Message.safeParse(message);
-
+    const valid = Message.safeParse(message);
+    if (valid.error) throw valid.error;
     const data = {
       message: message,
       username: session.user,
@@ -50,7 +50,7 @@ export const postMessage = async (formData: FormData) => {
 
     await db.insert(schema.messages).values(data);
   } catch (error) {
-    console.log("Failed to post message");
+    console.log(error);
   }
   revalidatePath("/statistics");
   revalidatePath("/");
