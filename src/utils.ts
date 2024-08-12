@@ -82,7 +82,7 @@ export const getUserStats = (
 
   const userFetches = fetches.filter((fetch) => fetch.username == username);
 
-  const sentPerMessage =
+  const sentPerFetch =
     userFetches.length != 0 ? userMessages.length / userFetches.length : 0;
 
   const newMessages = filteredMessages.length / userFetches.length;
@@ -90,7 +90,7 @@ export const getUserStats = (
   const stats = {
     username: username,
     messages: userMessages.length,
-    sentPerFetch: sentPerMessage.toFixed(2),
+    sentPerFetch: sentPerFetch.toFixed(2),
     newMessages: newMessages.toFixed(2),
   };
   return stats;
